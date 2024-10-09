@@ -87,6 +87,30 @@ class AdvancedProfilesEditScreenState extends State<AdvancedProfilesEditScreen>
     log.info('Disposed profile');
   }
 
+  void handleStepDelete(int index) {
+    _profile.deleteFrame(index);
+    _selectedStepIndex = min(_profile.shotFrames.length - 1, index);
+    _selectedStep = _profile.shotFrames[_selectedStepIndex];
+    log.info("New Step $_selectedStepIndex");
+    setState(() {});
+  }
+
+  void handleStepCopy(int index) {
+    _profile.cloneFrame(index);
+    _selectedStepIndex = min(_profile.shotFrames.length - 1, index + 1);
+    _selectedStep = _profile.shotFrames[_selectedStepIndex];
+    log.info("New Step $_selectedStepIndex");
+    setState(() {});
+  }
+
+  void handleStepReorder(int index, int direction) {
+    _profile.reorderFrame(index, direction);
+    _selectedStepIndex = min(_profile.shotFrames.length - 1, index + direction);
+    _selectedStep = _profile.shotFrames[_selectedStepIndex];
+    log.info("New Step $_selectedStepIndex");
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
     // var items = profileService.profiles
@@ -147,7 +171,8 @@ class AdvancedProfilesEditScreenState extends State<AdvancedProfilesEditScreen>
                                   labelText: "Desired weight", suffixText: "g"),
                               keyboardType: TextInputType.number,
                               inputFormatters: [
-                                FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*'))
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'^\d+\.?\d*'))
                               ], // Only numbers can be entered
                               onChanged: (value) {
                                 _profile.shotHeader.targetWeight =
@@ -158,7 +183,8 @@ class AdvancedProfilesEditScreenState extends State<AdvancedProfilesEditScreen>
                                   return "Value is required";
                                 }
                                 double v = double.parse(value);
-                                return v > 0 // && v <= _profile.shotFrames.length
+                                return v >
+                                        0 // && v <= _profile.shotFrames.length
                                     ? null
                                     : "Weight should be greater than zero";
                               },
@@ -173,7 +199,8 @@ class AdvancedProfilesEditScreenState extends State<AdvancedProfilesEditScreen>
                                   suffixText: "ml"),
                               keyboardType: TextInputType.number,
                               inputFormatters: [
-                                FilteringTextInputFormatter.allow(RegExp(r'^\d+\.?\d*'))
+                                FilteringTextInputFormatter.allow(
+                                    RegExp(r'^\d+\.?\d*'))
                               ], // Only numbers can be entered
                               onChanged: (value) {
                                 _profile.shotHeader.targetVolume =
@@ -184,7 +211,8 @@ class AdvancedProfilesEditScreenState extends State<AdvancedProfilesEditScreen>
                                   return "Value is required";
                                 }
                                 double v = double.parse(value);
-                                return v > 0 // && v <= _profile.shotFrames.length
+                                return v >
+                                        0 // && v <= _profile.shotFrames.length
                                     ? null
                                     : "Water volume must be greater than zero";
                               },
@@ -279,35 +307,13 @@ class AdvancedProfilesEditScreenState extends State<AdvancedProfilesEditScreen>
                           setState(() {});
                         },
                         onDeleted: (index) {
-                          _profile.shotFrames.removeAt(index);
-                          _selectedStepIndex =
-                              min(_profile.shotFrames.length - 1, index);
-                          _selectedStep =
-                              _profile.shotFrames[_selectedStepIndex];
-                          log.info("New Step $_selectedStepIndex");
-                          setState(() {});
+                          handleStepDelete(index);
                         },
                         onCopied: (index) {
-                          var clone = _profile.shotFrames[index].clone();
-                          _profile.shotFrames.insert(index, clone);
-                          _selectedStepIndex =
-                              min(_profile.shotFrames.length - 1, index + 1);
-                          _selectedStep =
-                              _profile.shotFrames[_selectedStepIndex];
-                          log.info("New Step $_selectedStepIndex");
-                          setState(() {});
+                          handleStepCopy(index);
                         },
                         onReordered: (index, direction) {
-                          var clone = _profile.shotFrames[index];
-                          _profile.shotFrames.removeAt(index);
-                          _profile.shotFrames.insert(index + direction, clone);
-                          _selectedStepIndex = min(
-                              _profile.shotFrames.length - 1,
-                              index + direction);
-                          _selectedStep =
-                              _profile.shotFrames[_selectedStepIndex];
-                          log.info("New Step $_selectedStepIndex");
-                          setState(() {});
+                          handleStepReorder(index, direction);
                         },
                       ),
                     ),
