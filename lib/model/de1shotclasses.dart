@@ -31,6 +31,7 @@ class De1ShotProfile {
   De1ShotProfile(this.shotHeader, this.shotFrames);
 
   De1ShotHeaderClass shotHeader;
+
   List<De1ShotFrameClass> shotFrames;
 
   factory De1ShotProfile.fromJson(Map<String, dynamic> json) =>
@@ -125,6 +126,7 @@ class De1ShotHeaderClass // proc spec_shotdescheader
   int minimumPressure = 0; // hard-coded, read as {
   double maximumFlow = 6; // hard-coded, read as {
 
+  @JsonKey(ignore: true)
   @Uint8ListConverter()
   Uint8List bytes = Uint8List(5);
 
@@ -316,11 +318,14 @@ enum De1Transition {
 @JsonSerializable()
 class De1StepLimiterData {
   double value = 0.0;
-  double range = 0.0;
+  double range = 0.6;
 
-	De1StepLimiterData();
+  De1StepLimiterData();
 
-	factory De1StepLimiterData.fromJson(Map<String, dynamic> json) => _$De1StepLimiterDataFromJson(json);
+  factory De1StepLimiterData.fromJson(Map<String, dynamic> json) =>
+      _$De1StepLimiterDataFromJson(json);
+
+	Map<String, dynamic> toJson() => _$De1StepLimiterDataToJson(this);
 
   De1StepLimiterData clone() {
     return De1StepLimiterData()
@@ -344,12 +349,14 @@ class De1ShotFrameClass // proc spec_shotframe
   De1SensorType sensor = De1SensorType.water;
   De1Transition transition = De1Transition.fast;
   De1StepLimiterData? limiter;
+  @JsonKey(ignore: true)
   @Uint8ListConverter()
   Uint8List bytes = Uint8List(8);
 
   static const int extFrameOffset = 32;
 
   // helpers for limiter values
+	@JsonKey(ignore: true)
   double get limiterValue => limiter?.value ?? 0;
   set limiterValue(double value) {
     if (limiter != null) {
@@ -359,6 +366,7 @@ class De1ShotFrameClass // proc spec_shotframe
     }
   }
 
+	@JsonKey(ignore: true)
   double get limiterRange => limiter?.range ?? 0;
   set limiterRange(double range) {
     if (limiter != null) {
