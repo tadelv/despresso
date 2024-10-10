@@ -22,7 +22,8 @@ class Uint8ListConverter implements JsonConverter<Uint8List, List<dynamic>> {
   }
 }
 
-@JsonSerializable()
+
+@JsonSerializable(explicitToJson: true)
 class De1ShotProfile {
   bool isDefault = false;
 
@@ -325,7 +326,7 @@ class De1StepLimiterData {
   factory De1StepLimiterData.fromJson(Map<String, dynamic> json) =>
       _$De1StepLimiterDataFromJson(json);
 
-	Map<String, dynamic> toJson() => _$De1StepLimiterDataToJson(this);
+  Map<String, dynamic> toJson() => _$De1StepLimiterDataToJson(this);
 
   De1StepLimiterData clone() {
     return De1StepLimiterData()
@@ -356,7 +357,7 @@ class De1ShotFrameClass // proc spec_shotframe
   static const int extFrameOffset = 32;
 
   // helpers for limiter values
-	@JsonKey(ignore: true)
+  @JsonKey(ignore: true)
   double get limiterValue => limiter?.value ?? 0;
   set limiterValue(double value) {
     if (limiter != null) {
@@ -366,7 +367,7 @@ class De1ShotFrameClass // proc spec_shotframe
     }
   }
 
-	@JsonKey(ignore: true)
+  @JsonKey(ignore: true)
   double get limiterRange => limiter?.range ?? 0;
   set limiterRange(double range) {
     if (limiter != null) {
