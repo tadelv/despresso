@@ -545,7 +545,7 @@ class AdvancedProfilesEditScreenState extends State<AdvancedProfilesEditScreen>
   }
 
   void updateLimiterValue(De1ShotFrameClass frame, double value) {
-    frame.limiterValue = value;
+    frame.limiterValue = (value * 10).round() / 10;
   }
 
   double getLimiterValue(De1ShotFrameClass frame) {
@@ -553,7 +553,7 @@ class AdvancedProfilesEditScreenState extends State<AdvancedProfilesEditScreen>
   }
 
   void updateLimiterRange(De1ShotFrameClass frame, double value) {
-    frame.limiterRange = value;
+    frame.limiterRange = (value * 10).round() / 10;
   }
 
   double getLimiterRange(De1ShotFrameClass frame) {
